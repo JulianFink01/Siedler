@@ -1,0 +1,5 @@
+Username: zxPtvrDtlz
+Database name: zxPtvrDtlz
+Password: NMBD3mGpfw
+Server: remotemysql.com
+Port: 3306

@@ -1,0 +1,80 @@
+$blue: #3498db;
+
+html{
+background-color: white;
+}
+
+#login{
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    display: flex;
+    width: 80%;
+    height: 50%;
+    flex-direction: column;
+    text-align: center;
+    background-color: $blue;
+    border-radius: 25px;
+}
+.login-item{
+  width: 100%;
+
+  @media(min-width: 650px){
+      height: 50%;
+  }
+  img{
+    width: 60%;
+    transform: translate(0, -45%);
+    @media(min-width: 650px){
+        width: 30%;
+    }
+    @media(min-width: 1200px){
+        width: 15%;
+    }
+  }
+}
+
+#login-form{
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+
+  legend{
+    color: white;
+    transform: translate(0,-100%);
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  input{
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 0;
+    &[name="pass"]{
+      background-image: url(../images/key.png);
+      padding-left: 50px;
+      background-size: 24px 24px;
+      background-position: 7px 7px;
+      background-repeat: no-repeat;
+    }
+    &[name="user"]{
+      background-image: url(../images/user.png);
+      padding-left: 50px;
+      background-size: 24px 24px;
+      background-position: 7px 7px;
+      background-repeat: no-repeat;
+    }
+    &[type="submit"]{
+      background-color: white;
+      color: $blue;
+      font-size: 100%;
+      transition: 0.8s all ease-in;
+      &:hover{
+        background-color: lighten($blue, 25%);
+        color: white;
+      }
+    }
+  }
+}
