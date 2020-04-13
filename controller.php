@@ -18,13 +18,16 @@ class Controller{
         $password = $_REQUEST['password'];
 
         $user = User::findeNachUsernameUndPassword($username, $password);
-        $user->__toString();
         if($user!=NULL){
-              echo "Login CHECK Name: ".$user->getUsername();
+              $this->addContext("template", "home");
         }else{
             $this->addContext("template", "login");
         }
       }
+  }
+
+  private function host_game(){
+
   }
 
   private function generatePage($template){

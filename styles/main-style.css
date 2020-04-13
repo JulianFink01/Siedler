@@ -1,3 +1,16 @@
+* {
+  margin: 0;
+  padding: 0; }
 
+.button {
+  list-style: none;
+  text-decoration: none;
+  margin: auto;
+  padding: 10vw;
+  background-color: #3498db;
+  text-align: center;
+  color: white;
+  vertical-align: center;
+  align-items: center; }
 
 /*# sourceMappingURL=main-style.css.map */
