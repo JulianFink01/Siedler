@@ -1,22 +1,415 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-if(!isset($_SESSION["logged_in"])){
-  header("Location: index.php");
-}
-?>
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="styles/main-style.css">
-  <title>Siedler - Home</title>
-  <link rel="icon" href="../styles/logo.png">
-</head>
-<body>
-  <a class="button" href="index.php?aktion=join_game">Join Game</a>
-  <a class="button" href="index.php?aktion=host_game">Host Game</a>
-</body>
+    <head>
+        <title>Siedler</title>
+        <link rel="stylesheet" href="styles/field-style.css">
+    </head>
+    <script src="js/jquery-3-4-1.js"></script>
+    <script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
+    <body>
+        <div class="parent">
+            <div class="child-container">
+                <div id="child">
+                    <div id="gamefield"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        //document.onload = setAllDigits('6590');
+
+
+        //SETUP
+
+        var desert = 0;
+        var forest = 0;
+        var grass = 0;
+        var rock = 0;
+        var wheat = 0;
+
+        var two = 0;
+        var three = 0;
+        var four = 0;
+        var five = 0;
+        var six = 0;
+        var eight = 0;
+        var nine = 0;
+        var ten = 0;
+        var eleven = 0;
+        var twelve = 0;
+
+        var MAXdesert = 0;  // 16,67%
+        var MAXforest = 0;  // 22,22%
+        var MAXgrass = 0;   // 22,22%
+        var MAXrock = 0;    // 16,67%
+        var MAXwheat = 0;   // 22,22%
+
+        var MAX2 = 0;       // 5,56%
+        var MAX3 = 0;       // 11,11%
+        var MAX4 = 0;       // 11,11%
+        var MAX5 = 0;       // 11,11%
+        var MAX6 = 0;       // 11,11%
+        var MAX8 = 0;       // 11,11%
+        var MAX9 = 0;       // 11,11%
+        var MAX10 = 0;      // 11,11%
+        var MAX11 = 0;      // 11,11%
+        var MAX12 = 0;      // 5,56%
+
+        //DRAGABLE
+
+        jQuery("#child").draggable({
+            cursor: "grab",
+            containment: "parent",
+            stop: function() {
+            if(jQuery("#child").position().left < 1)
+                jQuery("#child").css("left", "1px");
+            }
+        });
+
+        //WATER
+
+
+
+        //LAND
+
+        fieldGen(3);
+
+        function fieldGen(size){
+
+
+
+            var FULLheight = 256 * ((size * 2) - 2);
+            var rows = (size * 2) - 1;
+
+            var firstrow = (size * 296) + ((size - 1) * 148);
+
+            var id = 1;
+            var fieldnumber = 0;
+            var lefter = size;
+            var switcher = true;
+
+            for(ii = FULLheight; ii >= 0; ii = ii - 256){
+                var fields = (lefter - 1) * 148;
+                for(i = firstrow; i > fields; i = i - 296){
+                        fieldnumber++;
+                }
+
+                if(switcher){
+                    firstrow = firstrow + 148;
+                    lefter--;
+                    if(lefter == 1){
+                        switcher = false;
+                    }
+                }
+                else{
+                    firstrow = firstrow - 148;
+                    lefter++;
+                }
+            }
+
+            var fieldnumber2 = fieldnumber - 1;
+            MAXdesert = Math.round(fieldnumber2 * 0.1667);  //3 16,67%
+            MAXforest = Math.round(fieldnumber2 * 0.2222);  //4 22,22%
+            MAXgrass = Math.round(fieldnumber2 * 0.2222);   //4 22,22%
+            MAXrock = Math.round(fieldnumber2 * 0.1667);    //3 16,67%
+            MAXwheat = Math.round(fieldnumber2 * 0.2222);   //4 22,22%
+
+            MAX2 = Math.round(fieldnumber2 * 0.0556);       // 5,56%
+            MAX3 = Math.round(fieldnumber2 * 0.1111);       // 11,11%
+            MAX4 = Math.round(fieldnumber2 * 0.1111);       // 11,11%
+            MAX5 = Math.round(fieldnumber2 * 0.1111);       // 11,11%
+            MAX6 = Math.round(fieldnumber2 * 0.1111);       // 11,11%
+            MAX8 = Math.round(fieldnumber2 * 0.1111);       // 11,11%
+            MAX9 = Math.round(fieldnumber2 * 0.1111);       // 11,11%
+            MAX10 = Math.round(fieldnumber2 * 0.1111);      // 11,11%
+            MAX11 = Math.round(fieldnumber2 * 0.1111);      // 11,11%
+            MAX12 = Math.round(fieldnumber2 * 0.0556);      // 5,56%
+
+            var switcher = true;
+            var lefter = size;
+
+            for(ii = FULLheight; ii >= 0; ii = ii - 256){
+                var fields = (lefter - 1) * 148;
+                for(i = firstrow; i > fields; i = i - 296){
+                    if(id == (((fieldnumber - 1) / 2) + 1)){
+                        addTile(id, "d");
+                        setPosition(ii, i, id);
+                    }
+                    else{
+                        addTile(id, randomTile());
+                        setPosition(ii, i, id);
+                        addNumber((id + 2 * fieldnumber), randomNumber());
+                        setPosition(ii, i, (id + 2 * fieldnumber));
+                    }
+
+                    id++;
+                }
+
+
+                if(switcher){
+                    firstrow = firstrow + 148;
+                    lefter--;
+                    if(lefter == 1){
+                        switcher = false;
+                    }
+                }
+                else{
+                    firstrow = firstrow - 148;
+                    lefter++;
+                }
+
+            }
+
+        }
+
+        function addTile(id, type){
+            //d, d2, f, g, r, wa, we
+
+             var img = document.createElement("img");
+
+
+            if(type == "d"){
+                img.src = "images/tiles/desert.png";
+            }
+            else if(type == "d2"){
+                img.src = "images/tiles/desert2.png";
+            }
+            else if(type == "f"){
+                img.src = "images/tiles/forest.png";
+            }
+            else if(type == "g"){
+                img.src = "images/tiles/grass.png";
+            }
+            else if(type == "r"){
+                img.src = "images/tiles/rock.png";
+            }
+            else if(type == "wa"){
+                img.src = "images/tiles/water.png";
+            }
+            else if(type == "we"){
+                img.src = "images/tiles/wheat.png";
+            }
+
+            img.width = 500;
+            img.height = 500;
+
+            img.id = id;
+
+            var src = document.getElementById("gamefield");
+            src.appendChild(img);
+            document.getElementById(id).style.position = "absolute";
+        }
+
+        function addNumber(id, type){
+            //d, d2, f, g, r, wa, we
+
+             var img = document.createElement("img");
+
+
+            if(type == 2){
+                img.src = "images/numbers/2.png";
+            }
+            else if(type == 3){
+                img.src = "images/numbers/3.png";
+            }
+            else if(type == 4){
+                img.src = "images/numbers/4.png";
+            }
+            else if(type == 5){
+                img.src = "images/numbers/5.png";
+            }
+            else if(type == 6){
+                img.src = "images/numbers/6.png";
+            }
+            else if(type == 8){
+                img.src = "images/numbers/8.png";
+            }
+            else if(type == 9){
+                img.src = "images/numbers/9.png";
+            }
+            else if(type == 10){
+                img.src = "images/numbers/10.png";
+            }
+            else if(type == 11){
+                img.src = "images/numbers/11.png";
+            }
+            else if(type == 12){
+                img.src = "images/numbers/12.png";
+            }
+
+            img.width = 500;
+            img.height = 500;
+
+            img.id = id;
+
+            var src = document.getElementById("gamefield");
+            src.appendChild(img);
+            document.getElementById(id).style.position = "absolute";
+            document.getElementById(id).style.opacity = 0.8;
+        }
+
+        function setPosition(t ,l ,id){
+            document.getElementById(id).style.top = (t + "px");
+            document.getElementById(id).style.left = ((l - 148) + "px");
+        }
+
+        function getRndInteger(min, max) {
+          return Math.floor(Math.random() * (max - min + 1) ) + min;
+        }
+
+        function randomTile(){
+
+            var exit = false;
+            var counter = 0;
+
+            while(!exit){
+                var ran = getRndInteger(1, 5);
+                counter++;
+                if(ran == 1){
+                    if(desert < MAXdesert){
+                        desert++;
+                        exit = true;
+
+                        return "d2";
+                    }
+                }
+                else if(ran == 2){
+                    if(forest < MAXforest){
+                        forest++;
+                        exit = true;
+
+                        return "f";
+                    }
+                }
+                else if(ran == 3){
+                    if(grass < MAXgrass){
+                        grass++;
+                        exit = true;
+
+                        return "g";
+                    }
+                }
+                else if(ran == 4){
+                    if(rock < MAXrock){
+                        rock++;
+                        exit = true;
+
+                        return "r";
+                    }
+                }
+                else if(ran == 5){
+                    if(wheat < MAXwheat){
+                        wheat++;
+                        exit = true;
+
+                        return "we";
+                    }
+                }
+
+                if(counter == 1000){
+                    console.log("randomTile");
+                    exit=true;
+                }
+            }
+
+
+        }
+
+        function randomNumber(){
+
+            var exit = false;
+            var counter = 0;
+            while(!exit){
+                var ran = getRndInteger(2, 12);
+                if(ran != 7){
+                    counter++;
+                    if(ran == 2){
+                        if(two < MAX2){
+                            two++;
+                            exit = true;
+
+                            return 2;
+                        }
+                    }
+                    else if(ran == 3){
+                        if(three < MAX3){
+                            three++;
+                            exit = true;
+
+                            return 3;
+                        }
+                    }
+                    else if(ran == 4){
+                        if(four < MAX4){
+                            four++;
+                            exit = true;
+
+                            return 4;
+                        }
+                    }
+                    else if(ran == 5){
+                        if(five < MAX5){
+                            five++;
+                            exit = true;
+
+                            return 5;
+                        }
+                    }
+                    else if(ran == 6){
+                        if(six < MAX6){
+                            six++;
+                            exit = true;
+
+                            return 6;
+                        }
+                    }
+                    else if(ran == 8){
+                        if(eight < MAX8){
+                            eight++;
+                            exit = true;
+
+                            return 8;
+                        }
+                    }
+                    else if(ran == 9){
+                        if(nine < MAX9){
+                            nine++;
+                            exit = true;
+
+                            return 9;
+                        }
+                    }
+                    else if(ran == 10){
+                        if(ten < MAX10){
+                            ten++;
+                            exit = true;
+
+                            return 10;
+                        }
+                    }
+                    else if(ran == 11){
+                        if(eleven < MAX11){
+                            eleven++;
+                            exit = true;
+
+                            return 11;
+                        }
+                    }
+                    else if(ran == 12){
+                        if(twelve < MAX12){
+                            twelve++;
+                            exit = true;
+
+                            return 12;
+                        }
+                    }
+                    if(counter == 1000){
+                        console.log("randomNumber");
+                        exit=true;
+                    }
+                }
+            }
+        }
+    </script>
 
 </html>
