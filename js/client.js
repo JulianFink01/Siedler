@@ -8,7 +8,6 @@
   );
 
 
-
 function senden(){
   var text =   document.getElementById('text').value;
   socket.emit('info',text);
