@@ -20,6 +20,7 @@ class Controller{
         $user = User::findeNachUsernameUndPassword($username, $password);
         if($user!=NULL){
               $this->addContext("template", "home");
+              $_SESSION["logged_in"] = true;
         }else{
             $this->addContext("template", "login");
         }

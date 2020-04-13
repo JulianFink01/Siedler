@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require_once("entities/db.php");
     require_once("entities/user.php");
     require_once('controller.php');
